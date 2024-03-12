@@ -31,14 +31,16 @@ ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 # Check for and run optional user-supplied command to enable (advanced) customizations of the container
 RUN if [ -n "${CONTAINER_USER_CMD_PRE}" ]; then echo "${CONTAINER_USER_CMD_PRE}" | sh ; fi
 
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
 # Configure apt and install packages
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends apt-utils zip unzip nano ncdu gettext-base 2>&1 \
+    && apt -y install --no-install-recommends zip unzip ncdu gettext-base 2>&1 \
     #
     # Install git, procps, lsb-release (useful for CLI installs)
-    && apt-get -y install git iproute2 procps lsb-release \
-    && apt-get -y install mariadb-client \
-    && apt-get -y install libpng-dev \
+    && apt -y install git iproute2 procps lsb-release \
+    && apt -y install mariadb-client \
+    && apt -y install libpng-dev \
 \
     # Install extensions (optional)
     && docker-php-ext-install pdo_mysql gd \
